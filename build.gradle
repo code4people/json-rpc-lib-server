@@ -1,4 +1,4 @@
-group 'com.nullables'
+group 'com.code4people'
 version '0.0.1'
 
 apply plugin: 'java'
@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.9'
-    compile group: 'com.nullables', name: 'json-rpc-lib-binding', version: '0.0.1'
+    compile group: 'com.code4people', name: 'json-rpc-lib-binding', version: '0.0.1'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.8.9'
@@ -44,12 +44,12 @@ task createPom << {
             name 'json-rpc-lib-server'
             packaging 'jar'
             description 'Client library for JSON-RPC'
-            url 'https://github.com/nullables/json-rpc-lib-server'
+            url 'https://github.com/code4people/json-rpc-lib-server'
 
             scm {
-                connection 'scm:git:git://github.com/nullables/json-rpc-lib-server.git'
-                developerConnection 'scm:git:ssh://github.com/nullables/json-rpc-lib-server.git'
-                url 'https://github.com/nullables/json-rpc-lib-server'
+                connection 'scm:git:git://github.com/code4people/json-rpc-lib-server.git'
+                developerConnection 'scm:git:ssh://github.com/code4people/json-rpc-lib-server.git'
+                url 'https://github.com/code4people/json-rpc-lib-server'
             }
 
             licenses {
@@ -64,8 +64,8 @@ task createPom << {
                     id 'mobratil'
                     name 'Martin Obrátil'
                     email 'martin.obratil@icloud.com'
-                    organization 'Nullables'
-                    organizationUrl 'https://www.nullables.com'
+                    organization 'code4people'
+                    organizationUrl 'https://www.code4people.com'
                 }
             }
         }
