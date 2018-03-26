@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-import static com.code4people.jsonrpclib.binding.annotations.ParamsType.MISSING;
 import static org.junit.Assert.assertFalse;
 
 public class NotificationTest {
@@ -34,7 +33,7 @@ public class NotificationTest {
     }
 
     public static class Receiver {
-        @Bind(paramsTypes = MISSING)
+        @Bind
         public String method() {
             return "result";
         }

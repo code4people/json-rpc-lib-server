@@ -1,6 +1,7 @@
 package com.code4people.jsonrpclib.server.factories;
 
 import com.code4people.jsonrpclib.server.ServiceActivator;
+import com.code4people.jsonrpclib.server.bindings.MethodBinding;
 import com.code4people.jsonrpclib.server.handlers.JsonRequestHandler;
 import com.code4people.jsonrpclib.server.handlers.MethodParamsHandler;
 import com.code4people.jsonrpclib.server.handlers.RequestHandler;
@@ -10,8 +11,6 @@ import com.code4people.jsonrpclib.server.serialization.ResultSerializer;
 import com.code4people.jsonrpclib.server.serialization.SerializationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.code4people.jsonrpclib.server.handlers.errorresolving.DebugErrorFactory;
-import com.code4people.jsonrpclib.binding.MethodBinding;
-import com.code4people.jsonrpclib.binding.info.MethodInfo;
 import com.code4people.jsonrpclib.server.handlers.ServiceActivatorImpl;
 import com.code4people.jsonrpclib.server.serialization.ParamsDeserializer;
 
@@ -24,7 +23,7 @@ public class ServiceActivatorFactory {
     private SerializationService systemSerializationService = SerializationService.createSystemInstance();
 
     public ServiceActivator create(
-            List<MethodBinding<? extends MethodInfo>> methodBindings,
+            List<MethodBinding> methodBindings,
             ObjectMapper customObjectMapper,
             DebugErrorDetailLevel debugErrorDetailLevel) {
 
@@ -36,13 +35,13 @@ public class ServiceActivatorFactory {
         return new ServiceActivatorImpl(systemSerializationService, jsonRequestHandler, debugErrorFactory);
     }
 
-    private MethodParamsHandler createMethodParamsHandler(List<MethodBinding<? extends MethodInfo>> methodBindings, ObjectMapper customObjectMapper) {
+    private MethodParamsHandler createMethodParamsHandler(List<MethodBinding> methodBindings, ObjectMapper customObjectMapper) {
         ResultSerializer resultSerializer = new ResultSerializer(customObjectMapper);
         ParamsDeserializer paramsDeserializer = new ParamsDeserializer(customObjectMapper);
         JsonMethodAdapterFactory jsonMethodAdapterFactory = new JsonMethodAdapterFactory(paramsDeserializer, resultSerializer);
-        MethodOverloadRouterFactory methodOverloadRouterFactory = new MethodOverloadRouterFactory(jsonMethodAdapterFactory);
+        GranularParamsMethodDispatcherFactory granularParamsMethodDispatcherFactory = new GranularParamsMethodDispatcherFactory(jsonMethodAdapterFactory);
         SingleArgumentMethodDispatcherFactory singleArgumentMethodDispatcherFactory = new SingleArgumentMethodDispatcherFactory(jsonMethodAdapterFactory);
-        MethodDispatcherFactory methodDispatcherFactory = new MethodDispatcherFactory(methodOverloadRouterFactory, singleArgumentMethodDispatcherFactory);
+        MethodDispatcherFactory methodDispatcherFactory = new MethodDispatcherFactory(granularParamsMethodDispatcherFactory, singleArgumentMethodDispatcherFactory);
 
         Map<String, MethodDispatcher> methodDispatchersMap = methodBindings
                 .stream()

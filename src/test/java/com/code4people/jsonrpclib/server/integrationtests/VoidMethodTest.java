@@ -6,7 +6,6 @@ import com.code4people.jsonrpclib.binding.annotations.Bind;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.code4people.jsonrpclib.binding.annotations.ParamsType.MISSING;
 import static org.junit.Assert.assertEquals;
 
 public class VoidMethodTest {
@@ -34,7 +33,7 @@ public class VoidMethodTest {
     }
 
     public static class Receiver {
-        @Bind(as = "voidMethod", paramsTypes = MISSING)
+        @Bind(as = "voidMethod")
         public void method() {
         }
     }

@@ -1,8 +1,7 @@
 package com.code4people.jsonrpclib.server.factories;
 
+import com.code4people.jsonrpclib.server.bindings.SingleArgumentMethodBinding;
 import com.code4people.jsonrpclib.server.handlers.methods.JsonMethodAdapter;
-import com.code4people.jsonrpclib.binding.MethodBinding;
-import com.code4people.jsonrpclib.binding.info.SingleArgumentMethodInfo;
 import com.code4people.jsonrpclib.server.handlers.dispatch.SingleArgumentMethodDispatcher;
 
 public class SingleArgumentMethodDispatcherFactory {
@@ -13,7 +12,7 @@ public class SingleArgumentMethodDispatcherFactory {
         this.jsonMethodAdapterFactory = jsonMethodAdapterFactory;
     }
 
-    public SingleArgumentMethodDispatcher create(MethodBinding<SingleArgumentMethodInfo> methodBinding) {
+    public SingleArgumentMethodDispatcher create(SingleArgumentMethodBinding methodBinding) {
         JsonMethodAdapter jsonMethodAdapter = jsonMethodAdapterFactory.create(methodBinding.getMethodInfo(), methodBinding.getReceiverSupplier());
         return new SingleArgumentMethodDispatcher(jsonMethodAdapter);
     }

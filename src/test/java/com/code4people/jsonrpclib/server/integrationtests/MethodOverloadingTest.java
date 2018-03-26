@@ -21,13 +21,6 @@ public class MethodOverloadingTest {
                 .create();
     }
 
-    public static class NamedParamsOverloadingReceiver {
-        @Bind(paramsTypes = NAMED)
-        public String method(@Optional @Param("a") String a) {
-            return "1";
-        }
-    }
-
     @Test
     public void method_shouldReturnResponse_whenSendingPositionalParams() {
 
@@ -74,7 +67,7 @@ public class MethodOverloadingTest {
 
 
     public static class Receiver {
-        @Bind(paramsTypes = { MISSING, POSITIONAL, NAMED })
+        @Bind
         public String method(@Optional @Param("param") String param) {
             return param;
         }

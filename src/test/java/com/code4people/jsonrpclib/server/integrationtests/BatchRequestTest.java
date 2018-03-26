@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-import static com.code4people.jsonrpclib.binding.annotations.ParamsType.MISSING;
 import static com.code4people.jsonrpclib.binding.annotations.ParamsType.POSITIONAL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -53,21 +52,21 @@ public class BatchRequestTest {
     }
 
     public static class Receiver {
-        @Bind(paramsTypes = POSITIONAL)
+        @Bind
         public int sum(int a, int b, int c) {
             return a + b + c;
         }
 
-        @Bind(paramsTypes = POSITIONAL)
+        @Bind
         public void notify_hello(int a) {
         }
 
-        @Bind(paramsTypes = POSITIONAL)
+        @Bind
         public int subtract(int minuend, int subtrahend) {
             return minuend - subtrahend;
         }
 
-        @Bind(paramsTypes = MISSING)
+        @Bind
         public Object[] get_data() {
             return new Object[] { "hello", 5 };
         }

@@ -55,7 +55,7 @@ public class DebugErrorDetailLevelTest {
     }
 
     public static class Receiver {
-        @Bind(paramsTypes = ParamsType.POSITIONAL)
+        @Bind
         public void method(int a) {
 
         }

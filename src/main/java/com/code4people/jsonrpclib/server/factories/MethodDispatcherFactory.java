@@ -1,11 +1,10 @@
 package com.code4people.jsonrpclib.server.factories;
 
-import com.code4people.jsonrpclib.server.handlers.dispatch.MethodDispatcher;
 import com.code4people.jsonrpclib.binding.BindingErrorException;
-import com.code4people.jsonrpclib.binding.MethodBinding;
-import com.code4people.jsonrpclib.binding.info.GranularParamsMethodInfo;
-import com.code4people.jsonrpclib.binding.info.MethodInfo;
-import com.code4people.jsonrpclib.binding.info.SingleArgumentMethodInfo;
+import com.code4people.jsonrpclib.server.bindings.GranularParamsMethodBinding;
+import com.code4people.jsonrpclib.server.bindings.MethodBinding;
+import com.code4people.jsonrpclib.server.bindings.SingleArgumentMethodBinding;
+import com.code4people.jsonrpclib.server.handlers.dispatch.MethodDispatcher;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,25 +12,25 @@ import java.util.stream.Collectors;
 
 public class MethodDispatcherFactory {
 
-    private final MethodOverloadRouterFactory methodOverloadRouterFactory;
-    private final SingleArgumentMethodDispatcherFactory createSingleArgumentMethodDispatcherFactory;
+    private final GranularParamsMethodDispatcherFactory granularParamsMethodDispatcherFactory;
+    private final SingleArgumentMethodDispatcherFactory singleArgumentMethodDispatcherFactory;
 
-    public MethodDispatcherFactory(MethodOverloadRouterFactory methodOverloadRouterFactory, SingleArgumentMethodDispatcherFactory createSingleArgumentMethodDispatcherFactory) {
-        this.methodOverloadRouterFactory = methodOverloadRouterFactory;
-        this.createSingleArgumentMethodDispatcherFactory = createSingleArgumentMethodDispatcherFactory;
+    public MethodDispatcherFactory(GranularParamsMethodDispatcherFactory granularParamsMethodDispatcherFactory, SingleArgumentMethodDispatcherFactory singleArgumentMethodDispatcherFactory) {
+        this.granularParamsMethodDispatcherFactory = granularParamsMethodDispatcherFactory;
+        this.singleArgumentMethodDispatcherFactory = singleArgumentMethodDispatcherFactory;
     }
 
-    public MethodDispatcher create(String methodName, List<MethodBinding<? extends MethodInfo>> methodInfos) {
-        Optional<MethodBinding<SingleArgumentMethodInfo>> singleArgumentMethodBinding =
-                methodInfos
+    public MethodDispatcher create(String methodName, List<MethodBinding> methodBindings) {
+        Optional<SingleArgumentMethodBinding> singleArgumentMethodBinding =
+                methodBindings
                         .stream()
-                        .filter(mb -> mb.getMethodInfo() instanceof SingleArgumentMethodInfo)
-                        .map(mb -> (MethodBinding<SingleArgumentMethodInfo>) mb)
+                        .filter(mb -> mb instanceof SingleArgumentMethodBinding)
+                        .map(SingleArgumentMethodBinding.class::cast)
                         .findFirst();
 
         if (singleArgumentMethodBinding.isPresent()) {
-            if (methodInfos.size() == 1) {
-                return createSingleArgumentMethodDispatcherFactory.create(singleArgumentMethodBinding.get());
+            if (methodBindings.size() == 1) {
+                return singleArgumentMethodDispatcherFactory.create(singleArgumentMethodBinding.get());
             }
             else {
                 String message = String.format(
@@ -42,14 +41,14 @@ public class MethodDispatcherFactory {
             }
         }
         else {
-            List<MethodBinding<GranularParamsMethodInfo>> granularParamsMethodBindings =
-                    methodInfos
+            List<GranularParamsMethodBinding> granularParamsMethodBindings =
+                    methodBindings
                             .stream()
-                            .filter(mb -> mb.getMethodInfo() instanceof GranularParamsMethodInfo)
-                            .map(mb -> (MethodBinding<GranularParamsMethodInfo>) mb)
+                            .filter(mb -> mb instanceof GranularParamsMethodBinding)
+                            .map(mb -> (GranularParamsMethodBinding) mb)
                             .collect(Collectors.toList());
 
-            return methodOverloadRouterFactory.create(granularParamsMethodBindings, methodName);
+            return granularParamsMethodDispatcherFactory.create(granularParamsMethodBindings, methodName);
         }
     }
 }

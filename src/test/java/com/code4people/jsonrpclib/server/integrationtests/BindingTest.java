@@ -8,7 +8,7 @@ import org.junit.Test;
 public class BindingTest {
 
     @Test
-    public void serviceActivatorBuilder_shouldBindSuncessfully() {
+    public void serviceActivatorBuilder_shouldBindSuccessfully() {
         ServiceActivatorBuilder
                 .create()
                 .register(SuccessfullyBoundReceiver.class, SuccessfullyBoundReceiver::new)
@@ -16,22 +16,22 @@ public class BindingTest {
     }
 
     public static class SuccessfullyBoundReceiver {
-        @Bind(as = "method", paramsTypes = ParamsType.NAMED)
+        @Bind(as = "method", paramsType = ParamsType.NAMED)
         public void namedParamsMethod1(@Param("i") int i, @Param("k") int k) {
 
         }
 
-        @Bind(as = "method", paramsTypes = ParamsType.NAMED)
+        @Bind(as = "method", paramsType = ParamsType.NAMED)
         public void namedParamsMethod2(@Param("i") int i, @Param("j") int j) {
 
         }
 
-        @Bind(as = "method", paramsTypes = ParamsType.POSITIONAL)
+        @Bind(as = "method", paramsType = ParamsType.POSITIONAL)
         public void positionalParamsMethod1(int i, int j) {
 
         }
 
-        @Bind(as = "method", paramsTypes = ParamsType.POSITIONAL)
+        @Bind(as = "method", paramsType = ParamsType.POSITIONAL)
         public void positionalParamsMethod2(int i, int j, int k) {
 
         }
@@ -46,12 +46,12 @@ public class BindingTest {
     }
 
     public static class ConflictingMissingParamsOverloadReceiver {
-        @Bind(as = "method", paramsTypes = ParamsType.MISSING)
+        @Bind(as = "method")
         public void method1() {
 
         }
 
-        @Bind(as = "method", paramsTypes = ParamsType.MISSING)
+        @Bind(as = "method")
         public void method2() {
 
         }
@@ -66,12 +66,12 @@ public class BindingTest {
     }
 
     public static class ConflictingPositionalParamsOverloadReceiver {
-        @Bind(paramsTypes = ParamsType.POSITIONAL)
+        @Bind
         public void method(int i) {
 
         }
 
-        @Bind(paramsTypes = ParamsType.POSITIONAL)
+        @Bind
         public void method(String i) {
 
         }
@@ -86,12 +86,12 @@ public class BindingTest {
     }
 
     public static class ConflictingNamedParamsOverloadReceiver {
-        @Bind(paramsTypes = ParamsType.NAMED)
+        @Bind
         public void method(@Param("i") int i) {
 
         }
 
-        @Bind(paramsTypes = ParamsType.NAMED)
+        @Bind
         public void method(@Param("i") String i, @Optional @Param("j") String j) {
 
         }
@@ -106,13 +106,28 @@ public class BindingTest {
     }
 
     public static class ConflictingMethodNamesReceiver {
-        @Bind(as = "method", paramsTypes = ParamsType.NAMED)
+        @Bind(as = "method")
         public void method1() {
 
         }
 
         @BindToSingleArgument(as = "method")
         public void method2() {
+
+        }
+    }
+
+    @Test(expected = BindingErrorException.class)
+    public void serviceActivatorBuilder_shouldThrow_whenMissingParamsAnnotation() {
+        ServiceActivatorBuilder
+                .create()
+                .register(WrongBindingClass.class, WrongBindingClass::new)
+                .build();
+    }
+
+    public static class WrongBindingClass {
+        @Bind(paramsType = ParamsType.NAMED)
+        public void method(String s) {
 
         }
     }
