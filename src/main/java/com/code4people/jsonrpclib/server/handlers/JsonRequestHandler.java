@@ -28,8 +28,8 @@ public class JsonRequestHandler {
         if (message.isArray()) {
             ArrayNode jsonRequests = (ArrayNode) message;
             if (jsonRequests.size() == 0) {
-                JsonNode errorData = debugErrorFactory.create("Request batch cannot be empty", null);
-                Response response = Response.createInvalidRequestError(errorData);
+                JsonNode debugErrorData = debugErrorFactory.create("Request batch cannot be empty", null);
+                Response response = Response.createInvalidRequestError(debugErrorData);
                 return Optional.of(new Output(response));
             }
             return processMultipleRequests(jsonRequests).map(Output::new);
@@ -45,8 +45,8 @@ public class JsonRequestHandler {
             request = serializationService.deserialize(jsonRequest);
         }
         catch (SerializationException e) {
-            JsonNode errorData = debugErrorFactory.create("Deserialization of request json failed", e);
-            return Optional.of(Response.createInvalidRequestError(errorData));
+            JsonNode debugErrorData = debugErrorFactory.create("Deserialization of request json failed", e);
+            return Optional.of(Response.createInvalidRequestError(debugErrorData));
         }
         return requestHandler.processRequest(request);
     }

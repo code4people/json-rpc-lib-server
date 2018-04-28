@@ -30,21 +30,22 @@ public class RequestHandler {
                 response = Response.create(id, result);
             }
             catch (InvalidParamsException ex) {
-                JsonNode errorData = debugErrorFactory.create(ex.getMessage(), ex.getCause());
-                response = Response.createInvalidParamsError(id, errorData);
+                JsonNode debugErrorData = debugErrorFactory.create(ex.getMessage(), ex.getCause());
+                response = Response.createInvalidParamsError(id, debugErrorData);
             }
             catch (SpecificServerErrorException ex) {
-                response = Response.createError(id, ex.getCode(), ex.getMessage(), ex.getData());
+                JsonNode debugErrorData = debugErrorFactory.create(ex.getMessage(), ex.getCause());
+                response = Response.createError(id, ex.getCode(), ex.getMessage(), ex.getData(), debugErrorData);
             }
             catch (BaseErrorException ex) {
-                JsonNode errorData = debugErrorFactory.create(ex.getMessage(), ex.getCause());
-                response = Response.createInternalError(id, errorData);
+                JsonNode debugErrorData = debugErrorFactory.create(ex.getMessage(), ex.getCause());
+                response = Response.createInternalError(id, debugErrorData);
             }
         }
         else {
             String message = String.format("Method '%s' doesn't exist.", methodName);
-            JsonNode errorData = debugErrorFactory.create(message, null);
-            response = Response.createMethodNotFoundError(id, errorData);
+            JsonNode debugErrorData = debugErrorFactory.create(message, null);
+            response = Response.createMethodNotFoundError(id, debugErrorData);
         }
 
         // TODO: implement logging of response

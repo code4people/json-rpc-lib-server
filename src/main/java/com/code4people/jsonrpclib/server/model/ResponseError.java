@@ -1,6 +1,7 @@
 package com.code4people.jsonrpclib.server.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ResponseError {
@@ -15,13 +16,18 @@ public class ResponseError {
     private final String message;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final JsonNode data;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("_debugErrorData")
+    private final JsonNode debugErrorData;
 
     public ResponseError(int code,
                          String message,
-                         JsonNode data) {
+                         JsonNode data,
+                         JsonNode debugErrorData) {
         this.code = code;
         this.message = message;
         this.data = data;
+        this.debugErrorData = debugErrorData;
     }
 
     public int getCode() {
@@ -34,6 +40,10 @@ public class ResponseError {
 
     public JsonNode getData() {
         return data;
+    }
+
+    public JsonNode getDebugErrorData() {
+        return debugErrorData;
     }
 
     @Override

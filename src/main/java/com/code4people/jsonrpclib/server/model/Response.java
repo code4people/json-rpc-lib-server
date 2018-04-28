@@ -18,28 +18,28 @@ public class Response {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final ResponseError error;
 
-    public static Response createParseError(JsonNode data) {
-        return new Response(null, new ResponseError(PARSE_ERROR_CODE,"Parse error", data));
+    public static Response createParseError(JsonNode debugErrorData) {
+        return new Response(null, new ResponseError(PARSE_ERROR_CODE,"Parse error", null, debugErrorData));
     }
 
-    public static Response createInvalidRequestError(JsonNode data) {
-        return new Response(null, new ResponseError(INVALID_REQUEST_CODE,"Invalid Request", data));
+    public static Response createInvalidRequestError(JsonNode debugErrorData) {
+        return new Response(null, new ResponseError(INVALID_REQUEST_CODE,"Invalid Request", null, debugErrorData));
     }
 
-    public static Response createInvalidParamsError(Object id, JsonNode data) {
-        return new Response(id, new ResponseError(INVALID_PARAMS_CODE,"Invalid params", data));
+    public static Response createInvalidParamsError(Object id, JsonNode debugErrorData) {
+        return new Response(id, new ResponseError(INVALID_PARAMS_CODE,"Invalid params", null, debugErrorData));
     }
 
-    public static Response createInternalError(Object id, JsonNode data) {
-        return new Response(id, new ResponseError(INTERNAL_ERROR_CODE,"Internal error", data));
+    public static Response createInternalError(Object id, JsonNode debugErrorData) {
+        return new Response(id, new ResponseError(INTERNAL_ERROR_CODE,"Internal error", null, debugErrorData));
     }
 
-    public static Response createMethodNotFoundError(Object id, JsonNode data) {
-        return new Response(id, new ResponseError(METHOD_NOT_FOUND_CODE,"Method not found", data));
+    public static Response createMethodNotFoundError(Object id, JsonNode debugErrorData) {
+        return new Response(id, new ResponseError(METHOD_NOT_FOUND_CODE,"Method not found", null, debugErrorData));
     }
 
-    public static Response createError(Object id, int errorCode, String message, JsonNode data) {
-        return new Response(id, new ResponseError(errorCode, message, data));
+    public static Response createError(Object id, int errorCode, String message, JsonNode data, JsonNode debugErrorData) {
+        return new Response(id, new ResponseError(errorCode, message, data, debugErrorData));
     }
 
     public static Response create(Object id, JsonNode result) {

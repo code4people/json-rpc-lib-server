@@ -26,8 +26,8 @@ public class ServiceActivatorImpl implements ServiceActivator {
         try {
             jsonNode = serializationService.deserializeToJsonNode(message);
         } catch (SerializationException se) {
-            JsonNode errorData = debugErrorFactory.create(null, se);
-            Response response = Response.createParseError(errorData);
+            JsonNode debugErrorData = debugErrorFactory.create(null, se);
+            Response response = Response.createParseError(debugErrorData);
             return Optional.of(serializeResponseWithError(response));
         }
         return jsonRequestHandler.processJsonNodeMessage(jsonNode)
@@ -60,8 +60,8 @@ public class ServiceActivatorImpl implements ServiceActivator {
         try {
             return serializationService.serializeToString(response);
         } catch (SerializationException e) {
-            JsonNode errorData = debugErrorFactory.create("Failed to deserialize response.", e);
-            Response responseWithError = Response.createInternalError(response.getId(), errorData);
+            JsonNode debugErrorData = debugErrorFactory.create("Failed to deserialize response.", e);
+            Response responseWithError = Response.createInternalError(response.getId(), debugErrorData);
             return serializeResponseWithError(responseWithError);
         }
     }

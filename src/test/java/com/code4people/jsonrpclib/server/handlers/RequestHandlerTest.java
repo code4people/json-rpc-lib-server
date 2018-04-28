@@ -55,7 +55,7 @@ public class RequestHandlerTest {
         assertNull(response.getResult());
         Assert.assertEquals(ResponseError.METHOD_NOT_FOUND_CODE, response.getError().getCode());
         assertNotNull(response.getError().getMessage());
-        assertEquals(errorData, response.getError().getData());
+        assertEquals(errorData, response.getError().getDebugErrorData());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class RequestHandlerTest {
         assertNull(response.getResult());
         assertEquals(ResponseError.INVALID_PARAMS_CODE, response.getError().getCode());
         assertNotNull(response.getError().getMessage());
-        assertEquals(errorData, response.getError().getData());
+        assertEquals(errorData, response.getError().getDebugErrorData());
     }
 
     @Test

@@ -29,7 +29,7 @@ public class DebugErrorDetailLevelTest {
         String result = serviceActivator.processMessage(message).get();
 
         assertEquals(
-                "{\"jsonrpc\":\"2.0\",\"id\":3,\"error\":{\"code\":-32602,\"message\":\"Invalid params\",\"data\":{\"detailMessage\":\"Failed to deserialize parameter value: 'false'.\"}}}",
+                "{\"jsonrpc\":\"2.0\",\"id\":3,\"error\":{\"code\":-32602,\"message\":\"Invalid params\",\"_debugErrorData\":{\"detailMessage\":\"Failed to deserialize parameter value: 'false'.\"}}}",
                 result);
     }
 
