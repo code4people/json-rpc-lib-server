@@ -182,10 +182,10 @@ public class InvocationErrorsTest {
     }
 
     @Test
-    public void callThatResultsWithMappedError_shouldReturnError() {
+    public void callThatResultsWithMethodMappedError_shouldReturnError() {
         String message = "{" +
                 "   \"jsonrpc\": \"2.0\", " +
-                "   \"method\": \"methodWithMappedError\", " +
+                "   \"method\": \"methodWithMappedError1\", " +
                 "   \"id\": \"1\"" +
                 "}";
         String response = serviceActivator.processMessage(message).get();
@@ -195,6 +195,23 @@ public class InvocationErrorsTest {
                 response);
     }
 
+    @Test
+    public void callThatResultsWithClassMappedError_shouldReturnError() {
+        String message = "{" +
+                "   \"jsonrpc\": \"2.0\", " +
+                "   \"method\": \"methodWithMappedError2\", " +
+                "   \"id\": \"1\"" +
+                "}";
+        String response = serviceActivator.processMessage(message).get();
+
+        assertEquals(
+                "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"error\":{\"code\":33000,\"message\":\"This is custom message\"}}",
+                response);
+    }
+
+    @ErrorMapping(
+            @com.code4people.jsonrpclib.binding.annotations.Error(code = 33000, exception = IllegalStateException.class, message = "This is custom message")
+    )
     public static class Receiver {
         @Bind
         public String method(int i, int j) {
@@ -220,8 +237,13 @@ public class InvocationErrorsTest {
         @ErrorMapping(
                 @com.code4people.jsonrpclib.binding.annotations.Error(code = 32000, exception = RuntimeException.class, message = "This is custom message")
         )
-        public String methodWithMappedError() {
+        public String methodWithMappedError1() {
             throw new RuntimeException("This is unexpected method message");
+        }
+
+        @Bind
+        public String methodWithMappedError2() {
+            throw new IllegalStateException("This is unexpected method message");
         }
     }
 }
